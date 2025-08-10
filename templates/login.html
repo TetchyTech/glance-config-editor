@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Glance Configuration Editor</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center min-vh-100 align-items-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="settings" class="me-2"></i>
+                            Glance Editor
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Flash messages -->
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">
+                                    <i data-feather="user" class="me-1"></i>
+                                    Username
+                                </label>
+                                <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">
+                                    <i data-feather="lock" class="me-1"></i>
+                                    Password
+                                </label>
+                                <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i data-feather="log-in" class="me-1"></i>
+                                    Login
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center text-muted">
+                        <small>
+                            <i data-feather="shield" class="me-1"></i>
+                            Secure access to Glance configuration
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Info card -->
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i data-feather="info" class="me-1"></i>
+                            Default Credentials
+                        </h6>
+                        <p class="card-text small text-muted">
+                            Username: <code>admin</code><br>
+                            Password: <code>admin</code>
+                        </p>
+                        <p class="card-text small text-muted">
+                            Change these by setting <code>EDITOR_USERNAME</code> and <code>EDITOR_PASSWORD</code> environment variables.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize feather icons
+        feather.replace();
+        
+        // Auto-focus username field
+        document.getElementById('username').focus();
+    </script>
+</body>
+</html>

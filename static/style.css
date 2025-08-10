@@ -1,0 +1,198 @@
+/* Custom styles for Glance Configuration Editor */
+
+/* Fullscreen editor styles */
+.fullscreen-editor {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999;
+    margin: 0;
+    border-radius: 0 !important;
+}
+
+.fullscreen-editor .card-body {
+    padding: 0 !important;
+}
+
+/* Backup item hover effect */
+.backup-item {
+    transition: all 0.2s ease-in-out;
+}
+
+.backup-item:hover {
+    background-color: var(--bs-secondary-bg);
+    border-color: var(--bs-secondary-border-subtle) !important;
+}
+
+/* Alert sizing */
+.alert-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
+/* Monaco editor container */
+#editor-container {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+}
+
+/* Loading spinner for editor */
+#loading-editor {
+    background-color: var(--bs-dark);
+    border-radius: 0.375rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    #editor-container {
+        height: 50vh !important;
+    }
+    
+    .fullscreen-editor #editor-container {
+        height: 100vh !important;
+    }
+    
+    .card-header .btn-group .btn {
+        padding: 0.25rem 0.5rem;
+    }
+}
+
+/* Button icon alignment */
+.btn i[data-feather] {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.btn-sm i[data-feather] {
+    width: 14px;
+    height: 14px;
+}
+
+/* Status indicators */
+.alert i[data-feather] {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-top;
+}
+
+/* Card hover effects */
+.card {
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollable backup list */
+#backups-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#backups-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#backups-list::-webkit-scrollbar-track {
+    background: var(--bs-secondary-bg);
+    border-radius: 3px;
+}
+
+#backups-list::-webkit-scrollbar-thumb {
+    background: var(--bs-secondary);
+    border-radius: 3px;
+}
+
+#backups-list::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-secondary-color);
+}
+
+/* File path display */
+#file-path {
+    word-break: break-all;
+    background-color: var(--bs-secondary-bg);
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--bs-border-color);
+}
+
+/* Active button states */
+.btn.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: var(--bs-white);
+}
+
+/* Login page specific styles */
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+/* Form focus styles */
+.form-control:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Monaco editor theme integration */
+.monaco-editor {
+    background-color: var(--bs-dark) !important;
+}
+
+/* Ensure proper spacing */
+.container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+    .container-fluid {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+/* Validation status animations */
+#validation-status .alert {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Improve text readability */
+.text-break {
+    word-break: break-word !important;
+}
+
+/* Button loading state */
+.btn:disabled {
+    opacity: 0.65;
+}
+
+/* Ensure icons are properly sized in different contexts */
+.navbar-brand i[data-feather] {
+    width: 20px;
+    height: 20px;
+}
+
+.card-title i[data-feather] {
+    width: 18px;
+    height: 18px;
+}

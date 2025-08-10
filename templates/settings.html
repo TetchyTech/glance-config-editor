@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Glance Config Editor</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+                    <div class="container-fluid">
+                        <span class="navbar-brand mb-0 h1">
+                            <i data-feather="settings"></i>
+                            Glance Config Editor - Settings
+                        </span>
+                        <div class="navbar-nav ms-auto">
+                            <a class="nav-link" href="{{ url_for('index') }}">
+                                <i data-feather="arrow-left"></i> Back to Editor
+                            </a>
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i data-feather="log-out"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 col-xl-6 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i data-feather="github"></i>
+                            GitHub Integration Settings
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="alert-container"></div>
+                        
+                        <form id="github-settings-form">
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="github-enabled">
+                                    <label class="form-check-label fw-bold" for="github-enabled">
+                                        Enable GitHub Sync
+                                    </label>
+                                </div>
+                                <small class="text-muted">When enabled, configuration changes will be automatically pushed to your GitHub repository</small>
+                            </div>
+
+                            <div id="github-config" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="github-token" class="form-label">GitHub Personal Access Token</label>
+                                    <input type="password" class="form-control" id="github-token" placeholder="ghp_xxxxxxxxxxxx">
+                                    <small class="text-muted">
+                                        Create a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" class="text-decoration-none">Personal Access Token</a> 
+                                        with 'repo' permissions
+                                    </small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="github-repo" class="form-label">Repository</label>
+                                    <input type="text" class="form-control" id="github-repo" placeholder="username/repository-name">
+                                    <small class="text-muted">Format: username/repository-name (e.g., john/glance-config)</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="github-branch" class="form-label">Branch</label>
+                                    <input type="text" class="form-control" id="github-branch" value="main" placeholder="main">
+                                    <small class="text-muted">Branch to commit changes to</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="github-path" class="form-label">File Path in Repository</label>
+                                    <input type="text" class="form-control" id="github-path" value="glance.yaml" placeholder="glance.yaml">
+                                    <small class="text-muted">Path where the configuration file should be stored in the repository</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="commit-message" class="form-label">Commit Message Template</label>
+                                    <input type="text" class="form-control" id="commit-message" value="Update glance configuration" placeholder="Update glance configuration">
+                                    <small class="text-muted">Message used when committing changes</small>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary" id="save-btn">
+                                    <i data-feather="save"></i>
+                                    Save Settings
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" id="test-btn" style="display: none;">
+                                    <i data-feather="check-circle"></i>
+                                    Test Connection
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i data-feather="info"></i>
+                            How GitHub Sync Works
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i data-feather="check" class="text-success me-2" width="16" height="16"></i>
+                                Every time you save your configuration, it's automatically backed up locally
+                            </li>
+                            <li class="mb-2">
+                                <i data-feather="check" class="text-success me-2" width="16" height="16"></i>
+                                If GitHub sync is enabled, the file is also pushed to your repository
+                            </li>
+                            <li class="mb-2">
+                                <i data-feather="check" class="text-success me-2" width="16" height="16"></i>
+                                Your GitHub repository serves as an additional backup and version history
+                            </li>
+                            <li class="mb-2">
+                                <i data-feather="shield" class="text-info me-2" width="16" height="16"></i>
+                                Your GitHub token is stored securely and never logged
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        let githubSettings = {};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            loadSettings();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('github-enabled').addEventListener('change', toggleGithubConfig);
+            document.getElementById('github-settings-form').addEventListener('submit', saveSettings);
+            document.getElementById('test-btn').addEventListener('click', testConnection);
+        }
+
+        function toggleGithubConfig() {
+            const enabled = document.getElementById('github-enabled').checked;
+            const config = document.getElementById('github-config');
+            const testBtn = document.getElementById('test-btn');
+            
+            config.style.display = enabled ? 'block' : 'none';
+            testBtn.style.display = enabled ? 'inline-block' : 'none';
+        }
+
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/github-settings');
+                const data = await response.json();
+                
+                if (data.success) {
+                    githubSettings = data.settings;
+                    document.getElementById('github-enabled').checked = githubSettings.enabled || false;
+                    document.getElementById('github-token').value = githubSettings.token || '';
+                    document.getElementById('github-repo').value = githubSettings.repo || '';
+                    document.getElementById('github-branch').value = githubSettings.branch || 'main';
+                    document.getElementById('github-path').value = githubSettings.path || 'glance.yaml';
+                    document.getElementById('commit-message').value = githubSettings.commit_message || 'Update glance configuration';
+                    
+                    toggleGithubConfig();
+                }
+            } catch (error) {
+                console.error('Failed to load settings:', error);
+            }
+        }
+
+        async function saveSettings(e) {
+            e.preventDefault();
+            
+            const saveBtn = document.getElementById('save-btn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i data-feather="loader"></i> Saving...';
+            saveBtn.disabled = true;
+            
+            const settings = {
+                enabled: document.getElementById('github-enabled').checked,
+                token: document.getElementById('github-token').value,
+                repo: document.getElementById('github-repo').value,
+                branch: document.getElementById('github-branch').value,
+                path: document.getElementById('github-path').value,
+                commit_message: document.getElementById('commit-message').value
+            };
+            
+            try {
+                const response = await fetch('/api/github-settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(settings)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Settings saved successfully', 'success');
+                    githubSettings = settings;
+                } else {
+                    showAlert(data.error, 'danger');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                showAlert('Failed to save settings', 'danger');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+                feather.replace();
+            }
+        }
+
+        async function testConnection() {
+            const testBtn = document.getElementById('test-btn');
+            const originalText = testBtn.innerHTML;
+            testBtn.innerHTML = '<i data-feather="loader"></i> Testing...';
+            testBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/test-github');
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('GitHub connection successful!', 'success');
+                } else {
+                    showAlert(data.error, 'danger');
+                }
+            } catch (error) {
+                console.error('Test error:', error);
+                showAlert('Failed to test connection', 'danger');
+            } finally {
+                testBtn.innerHTML = originalText;
+                testBtn.disabled = false;
+                feather.replace();
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHtml;
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                const alert = alertContainer.querySelector('.alert');
+                if (alert) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
