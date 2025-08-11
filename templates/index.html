@@ -14,8 +14,14 @@
     <!-- CodeMirror for YAML syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/darcula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/matchesonscrollbar.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/yaml/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/searchcursor.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/dialog/dialog.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/search/jump-to-line.min.js"></script>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -114,6 +120,9 @@
                             YAML Editor
                         </h5>
                         <div class="btn-group" role="group">
+                            <button id="search-btn" class="btn btn-outline-secondary btn-sm" title="Find in Editor (Ctrl+F)">
+                                <i data-feather="search"></i>
+                            </button>
                             <button id="word-wrap-btn" class="btn btn-outline-secondary btn-sm" title="Toggle Word Wrap">
                                 <i data-feather="corner-down-right"></i>
                             </button>
@@ -170,7 +179,9 @@
                     'Ctrl-S': function() { saveConfiguration(); },
                     'Cmd-S': function() { saveConfiguration(); },
                     'Ctrl-R': function() { loadConfiguration(); },
-                    'Cmd-R': function() { loadConfiguration(); }
+                    'Cmd-R': function() { loadConfiguration(); },
+                    'Ctrl-F': 'findPersistent',
+                    'Cmd-F': 'findPersistent'
                 }
             });
             
@@ -192,6 +203,7 @@
             document.getElementById('load-btn').addEventListener('click', loadConfiguration);
             document.getElementById('undo-btn').addEventListener('click', undoChanges);
             document.getElementById('save-btn').addEventListener('click', saveConfiguration);
+            document.getElementById('search-btn').addEventListener('click', openSearch);
             document.getElementById('word-wrap-btn').addEventListener('click', toggleWordWrap);
             document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
         }
@@ -396,6 +408,11 @@
             
             const btn = document.getElementById('word-wrap-btn');
             btn.classList.toggle('active', wordWrap);
+        }
+
+        // Open search dialog
+        function openSearch() {
+            editor.execCommand('findPersistent');
         }
 
         // Toggle fullscreen

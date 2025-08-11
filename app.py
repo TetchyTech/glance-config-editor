@@ -35,7 +35,7 @@ def cleanup_old_backups():
         
         backup_files = []
         for filename in os.listdir(BACKUP_DIR):
-            if filename.endswith('.yaml') and filename.startswith('glance_backup_'):
+            if filename.endswith('.yml') and filename.startswith('glance_backup_'):
                 filepath = os.path.join(BACKUP_DIR, filename)
                 backup_files.append((filepath, os.path.getmtime(filepath)))
         
@@ -280,7 +280,7 @@ def list_backups():
         
         if os.path.exists(BACKUP_DIR):
             for filename in os.listdir(BACKUP_DIR):
-                if filename.endswith('.yaml') and filename.startswith('glance_backup_'):
+                if filename.endswith('.yml') and filename.startswith('glance_backup_'):
                     filepath = os.path.join(BACKUP_DIR, filename)
                     stat = os.stat(filepath)
                     backup_files.append({

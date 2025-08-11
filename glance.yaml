@@ -1,0 +1,54 @@
+# Sample Glance Configuration
+# This is a demo configuration for the Glance Configuration Editor
+# Edit this file through the web interface to customize your dashboard
+
+pages:
+  - name: Home
+    columns:
+      - size: small
+        widgets:
+          - type: calendar
+            first-day-of-week: monday
+
+          - type: weather
+            location: New York, NY
+            units: metric
+            hour-format: 12h
+
+      - size: full
+        widgets:
+          - type: rss
+            limit: 10
+            collapse-after: 3
+            cache: 12h
+            feeds:
+              - url: https://feeds.feedburner.com/TechCrunch
+                title: TechCrunch
+                limit: 5
+              - url: https://rss.cnn.com/rss/edition.rss
+                title: CNN
+
+          - type: hacker-news
+            limit: 15
+            collapse-after: 5
+
+      - size: small
+        widgets:
+          - type: markets
+            markets:
+              - symbol: SPY
+                name: S&P 500
+              - symbol: BTC-USD
+                name: Bitcoin
+              - symbol: AAPL
+                name: Apple
+
+theme:
+  background-color: 240 240 240
+  primary-color: 56 58 64
+  positive-color: 43 154 243
+  negative-color: 235 86 86
+
+server:
+  host: 0.0.0.0
+  port: 8080
