@@ -53,7 +53,7 @@ Thumbs.db
 *~
 
 # Glance configuration (don't commit actual config)
-glance.yaml
+glance.yml
 
 # GitHub settings (contains tokens)
 github_settings.json

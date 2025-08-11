@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Restore original glance.yaml from initial backup
+# Restore original glance.yml from initial backup
 # Use this if you need to revert to your original configuration
 
 set -e
@@ -36,13 +36,13 @@ fi
 BACKUP_DIR="/opt/glance-editor/backups"
 
 # Find original backup
-ORIGINAL_BACKUP=$(ls -1 ${BACKUP_DIR}/glance_original_backup_*.yaml 2>/dev/null | head -1)
+ORIGINAL_BACKUP=$(ls -1 ${BACKUP_DIR}/glance_original_backup_*.yml 2>/dev/null | head -1)
 
 if [ -z "$ORIGINAL_BACKUP" ]; then
     print_error "No original backup found!"
-    print_status "Looking for files matching: ${BACKUP_DIR}/glance_original_backup_*.yaml"
+    print_status "Looking for files matching: ${BACKUP_DIR}/glance_original_backup_*.yml"
     print_status "Available backups:"
-    ls -la ${BACKUP_DIR}/*.yaml 2>/dev/null || echo "  No backups found"
+    ls -la ${BACKUP_DIR}/*.yml 2>/dev/null || echo "  No backups found"
     exit 1
 fi
 
@@ -51,7 +51,7 @@ print_status "Current config path: $GLANCE_CONFIG_PATH"
 
 # Confirm restore
 echo ""
-print_warning "This will replace your current glance.yaml with the original backup."
+print_warning "This will replace your current glance.yml with the original backup."
 read -p "Are you sure you want to continue? (y/N): " confirm
 
 if [[ ! $confirm =~ ^[Yy]$ ]]; then
@@ -62,7 +62,7 @@ fi
 # Create a backup of current state before restoring
 if [ -f "$GLANCE_CONFIG_PATH" ]; then
     print_status "Creating backup of current configuration..."
-    CURRENT_BACKUP_NAME="glance_pre_restore_backup_$(date +%Y%m%d_%H%M%S).yaml"
+    CURRENT_BACKUP_NAME="glance_pre_restore_backup_$(date +%Y%m%d_%H%M%S).yml"
     cp "$GLANCE_CONFIG_PATH" "${BACKUP_DIR}/$CURRENT_BACKUP_NAME"
     print_status "Current config backed up as: $CURRENT_BACKUP_NAME"
 fi

@@ -19,7 +19,7 @@ sudo ./install.sh
 The automated installer will:
 - Install Python dependencies in virtual environment
 - Create secure default configuration with random secrets
-- Back up your existing glance.yaml safely
+- Back up your existing glance.yml safely
 - Set up systemd service for automatic startup
 - Configure proper file permissions
 
@@ -104,7 +104,7 @@ mkdir -p templates static backups
 # Create environment file
 cat > /opt/glance-editor/.env << 'EOF'
 export SESSION_SECRET="glance-editor-$(openssl rand -hex 16)"
-export GLANCE_CONFIG_PATH="/opt/glance/glance.yaml"
+export GLANCE_CONFIG_PATH="/opt/glance/glance.yml"
 export BACKUP_DIR="/opt/glance-editor/backups"
 export EDITOR_USERNAME="admin"
 export EDITOR_PASSWORD="your-secure-password-here"
@@ -208,7 +208,7 @@ The application runs on port 5000 by default. Make sure:
 
 ### Integration with Existing Glance
 If you already have Glance running:
-- Set `GLANCE_CONFIG_PATH` to your existing glance.yaml file
+- Set `GLANCE_CONFIG_PATH` to your existing glance.yml file
 - The editor will read/write to your actual configuration
 - Backups are stored separately in the backup directory
 

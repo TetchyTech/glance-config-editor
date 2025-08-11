@@ -77,7 +77,7 @@
 
                                 <div class="mb-3">
                                     <label for="github-path" class="form-label">File Path in Repository</label>
-                                    <input type="text" class="form-control" id="github-path" value="glance.yaml" placeholder="glance.yaml">
+                                    <input type="text" class="form-control" id="github-path" value="glance.yml" placeholder="glance.yml">
                                     <small class="text-muted">Path where the configuration file should be stored in the repository</small>
                                 </div>
 
@@ -170,7 +170,7 @@
                     document.getElementById('github-token').value = githubSettings.token || '';
                     document.getElementById('github-repo').value = githubSettings.repo || '';
                     document.getElementById('github-branch').value = githubSettings.branch || 'main';
-                    document.getElementById('github-path').value = githubSettings.path || 'glance.yaml';
+                    document.getElementById('github-path').value = githubSettings.path || 'glance.yml';
                     document.getElementById('commit-message').value = githubSettings.commit_message || 'Update glance configuration';
                     
                     toggleGithubConfig();

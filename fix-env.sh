@@ -15,7 +15,7 @@ else
     echo "❌ .env file not found! Creating a basic one..."
     cat > .env << 'EOF'
 export SESSION_SECRET="glance-editor-$(openssl rand -hex 16)"
-export GLANCE_CONFIG_PATH="/opt/glance/glance.yaml"
+export GLANCE_CONFIG_PATH="/opt/glance/glance.yml"
 export BACKUP_DIR="/opt/glance-editor/backups"
 export EDITOR_USERNAME="admin"
 export EDITOR_PASSWORD="admin"
@@ -25,8 +25,8 @@ fi
 
 # Create initial backup if glance config exists and no backups exist yet
 if [ -f "${GLANCE_CONFIG_PATH}" ] && [ ! -f "/opt/glance-editor/backups/glance_original_backup_"* ]; then
-    echo "📦 Creating initial backup of existing glance.yaml..."
-    INITIAL_BACKUP_NAME="glance_original_backup_$(date +%Y%m%d_%H%M%S).yaml"
+    echo "📦 Creating initial backup of existing glance.yml..."
+    INITIAL_BACKUP_NAME="glance_original_backup_$(date +%Y%m%d_%H%M%S).yml"
     mkdir -p /opt/glance-editor/backups
     cp "${GLANCE_CONFIG_PATH}" "/opt/glance-editor/backups/$INITIAL_BACKUP_NAME"
     echo "✅ Original configuration backed up as: $INITIAL_BACKUP_NAME"

@@ -74,8 +74,8 @@ while true; do
     print_warning "Password cannot be empty"
 done
 
-read -p "Path to Glance config file [/opt/glance/glance.yaml]: " GLANCE_PATH
-GLANCE_PATH=${GLANCE_PATH:-/opt/glance/glance.yaml}
+read -p "Path to Glance config file [/opt/glance/glance.yml]: " GLANCE_PATH
+GLANCE_PATH=${GLANCE_PATH:-/opt/glance/glance.yml}
 
 # Create environment file
 print_status "Creating environment configuration..."
@@ -109,10 +109,10 @@ if [ ! -f "app.py" ]; then
     exit 1
 fi
 
-# Create initial backup of existing glance.yaml if it exists
+# Create initial backup of existing glance.yml if it exists
 if [ -f "$GLANCE_PATH" ]; then
-    print_status "Creating initial backup of existing glance.yaml..."
-    INITIAL_BACKUP_NAME="glance_original_backup_$(date +%Y%m%d_%H%M%S).yaml"
+    print_status "Creating initial backup of existing glance.yml..."
+    INITIAL_BACKUP_NAME="glance_original_backup_$(date +%Y%m%d_%H%M%S).yml"
     cp "$GLANCE_PATH" "/opt/glance-editor/backups/$INITIAL_BACKUP_NAME"
     print_status "Original configuration backed up as: $INITIAL_BACKUP_NAME"
 else

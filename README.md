@@ -7,7 +7,7 @@ A lightweight web-based editor for Glance dashboard configuration files, designe
 - **YAML Syntax Highlighting**: CodeMirror editor with dark theme and line numbers
 - **Real-time Validation**: Automatic YAML validation as you type
 - **Automatic Backups**: Keeps the last 20 configuration backups with timestamps
-- **Original Backup Protection**: Creates initial backup of existing glance.yaml on first install
+- **Original Backup Protection**: Creates initial backup of existing glance.yml on first install
 - **Easy Recovery**: One-command restoration to original configuration
 - **GitHub Integration**: Optional sync to GitHub repository on save
 - **Responsive Design**: Works on desktop, tablet, and mobile
@@ -30,7 +30,7 @@ sudo ./install.sh
 **What the installer does:**
 - Creates Python virtual environment
 - Installs all required dependencies
-- Backs up your existing glance.yaml file safely
+- Backs up your existing glance.yml file safely
 - Creates systemd service for automatic startup
 - Sets up secure default configuration
 
@@ -64,7 +64,7 @@ If you cannot use GitHub, see [DEPLOYMENT.md](./DEPLOYMENT.md) for manual file t
 Edit `/opt/glance-editor/.env`:
 ```bash
 export SESSION_SECRET="your-secure-random-string"
-export GLANCE_CONFIG_PATH="/path/to/your/glance.yaml"
+export GLANCE_CONFIG_PATH="/path/to/your/glance.yml"
 export BACKUP_DIR="/opt/glance-editor/backups"
 export EDITOR_USERNAME="admin"
 export EDITOR_PASSWORD="your-secure-password"
@@ -115,7 +115,7 @@ journalctl -u glance-editor -f         # View logs
 ├── static/                  # CSS and assets
 │   └── style.css            # Custom styles
 ├── backups/                 # Configuration backups
-│   └── glance_original_backup_*.yaml  # Original backup
+│   └── glance_original_backup_*.yml   # Original backup
 └── glance-env/              # Python virtual environment
 ```
 
@@ -137,7 +137,7 @@ journalctl -u glance-editor -f         # View logs
 ## Recovery and Maintenance
 
 ### Restore Original Configuration
-If you need to revert to your original glance.yaml:
+If you need to revert to your original glance.yml:
 ```bash
 cd /opt/glance-editor
 sudo ./restore-original.sh
