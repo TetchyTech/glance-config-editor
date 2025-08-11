@@ -21,7 +21,7 @@ A lightweight web-based editor for Glance dashboard configuration files, designe
 ```bash
 # Install git and clone repository
 apt update && apt install git -y
-git clone https://github.com/YOUR-USERNAME/glance-config-editor.git /opt/glance-editor
+git clone https://github.com/TetchyTech/glance-config-editor.git /opt/glance-editor
 cd /opt/glance-editor
 chmod +x install.sh
 sudo ./install.sh
