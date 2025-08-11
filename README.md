@@ -40,7 +40,7 @@ sudo ./install.sh
 apt update && apt install python3 python3-pip python3-venv git -y
 
 # Clone repository from GitHub
-git clone https://github.com/YOUR-USERNAME/glance-config-editor.git /opt/glance-editor
+git clone https://github.com/TetchyTech/glance-config-editor.git /opt/glance-editor
 cd /opt/glance-editor
 
 # Set up Python environment manually
