@@ -7,46 +7,57 @@ A lightweight web-based editor for Glance dashboard configuration files, designe
 - **YAML Syntax Highlighting**: CodeMirror editor with dark theme and line numbers
 - **Real-time Validation**: Automatic YAML validation as you type
 - **Automatic Backups**: Keeps the last 20 configuration backups with timestamps
-- **Undo Functionality**: Revert to last saved configuration
+- **Original Backup Protection**: Creates initial backup of existing glance.yaml on first install
+- **Easy Recovery**: One-command restoration to original configuration
 - **GitHub Integration**: Optional sync to GitHub repository on save
 - **Responsive Design**: Works on desktop, tablet, and mobile
 - **Keyboard Shortcuts**: Ctrl+S to save, Ctrl+R to reload
 
-## Quick Install on LXC Container
+## Installation
 
-### One-Command Installation
+### GitHub Installation (Recommended)
+
+**One-Command Install:**
 ```bash
-# Install git if not present
+# Install git and clone repository
 apt update && apt install git -y
-
-# Clone and install
 git clone https://github.com/YOUR-USERNAME/glance-config-editor.git /opt/glance-editor
 cd /opt/glance-editor
 chmod +x install.sh
 sudo ./install.sh
 ```
 
-### Manual Installation
+**What the installer does:**
+- Creates Python virtual environment
+- Installs all required dependencies
+- Backs up your existing glance.yaml file safely
+- Creates systemd service for automatic startup
+- Sets up secure default configuration
+
+### Manual Step-by-Step Installation
 ```bash
-# Install dependencies
+# Install system dependencies
 apt update && apt install python3 python3-pip python3-venv git -y
 
-# Clone repository
+# Clone repository from GitHub
 git clone https://github.com/YOUR-USERNAME/glance-config-editor.git /opt/glance-editor
 cd /opt/glance-editor
 
-# Set up Python environment
+# Set up Python environment manually
 python3 -m venv glance-env
 source glance-env/bin/activate
 pip install flask pyyaml werkzeug gunicorn requests
 
-# Configure environment
+# Configure environment variables
 cp .env.example .env
 nano .env  # Edit your settings
 
-# Start the application
+# Start application manually
 python main.py
 ```
+
+### Legacy Installation (Without GitHub)
+If you cannot use GitHub, see [DEPLOYMENT.md](./DEPLOYMENT.md) for manual file transfer methods.
 
 ## Configuration
 
@@ -91,17 +102,21 @@ journalctl -u glance-editor -f         # View logs
 
 ```
 /opt/glance-editor/
-├── app.py              # Main Flask application
-├── main.py             # Entry point
-├── install.sh          # Automated installer
-├── templates/          # HTML templates
-│   ├── index.html      # Main editor interface
-│   ├── login.html      # Login page
-│   └── settings.html   # GitHub settings
-├── static/             # CSS and assets
-│   └── style.css       # Custom styles
-├── backups/            # Configuration backups
-└── glance-env/         # Python virtual environment
+├── app.py                   # Main Flask application
+├── main.py                  # Entry point
+├── install.sh               # Automated installer
+├── fix-env.sh               # Environment troubleshooting script
+├── restore-original.sh      # Restore to original backup
+├── .env.example             # Environment configuration template
+├── templates/               # HTML templates
+│   ├── index.html           # Main editor interface
+│   ├── login.html           # Login page
+│   └── settings.html        # GitHub settings
+├── static/                  # CSS and assets
+│   └── style.css            # Custom styles
+├── backups/                 # Configuration backups
+│   └── glance_original_backup_*.yaml  # Original backup
+└── glance-env/              # Python virtual environment
 ```
 
 ## Requirements
@@ -119,12 +134,30 @@ journalctl -u glance-editor -f         # View logs
 - Restrict network access if needed
 - Keep Python dependencies updated
 
+## Recovery and Maintenance
+
+### Restore Original Configuration
+If you need to revert to your original glance.yaml:
+```bash
+cd /opt/glance-editor
+sudo ./restore-original.sh
+```
+
+### Fix Environment Issues  
+If the service won't start after system changes:
+```bash
+cd /opt/glance-editor
+sudo ./fix-env.sh
+```
+
 ## Troubleshooting
 
+**Service won't start:** Run `sudo ./fix-env.sh` to fix environment issues  
 **Port 5000 in use:** Change port in main.py and service file
 **Permission denied:** Check file permissions and ownership  
 **Can't connect:** Verify firewall settings and bind address
-**Service won't start:** Check logs with `journalctl -u glance-editor -n 50`
+**Need original config:** Run `sudo ./restore-original.sh`
+**Check logs:** Use `journalctl -u glance-editor -f` to view real-time logs
 
 ## License
 

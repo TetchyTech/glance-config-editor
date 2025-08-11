@@ -2,15 +2,57 @@
 
 This guide will help you deploy the Glance Configuration Editor on your Proxmox LXC container.
 
-## Method 1: Direct File Transfer (Recommended)
+## Method 1: GitHub Installation (Recommended)
+
+### Quick Installation
+```bash
+# Update system and install git
+apt update && apt install git -y
+
+# Clone repository and install
+git clone https://github.com/YOUR-USERNAME/glance-config-editor.git /opt/glance-editor
+cd /opt/glance-editor
+chmod +x install.sh
+sudo ./install.sh
+```
+
+The automated installer will:
+- Install Python dependencies in virtual environment
+- Create secure default configuration with random secrets
+- Back up your existing glance.yaml safely
+- Set up systemd service for automatic startup
+- Configure proper file permissions
+
+```bash
+# Install system dependencies
+apt update && apt install python3 python3-pip python3-venv git -y
+
+# Clone from GitHub
+git clone https://github.com/YOUR-USERNAME/glance-config-editor.git /opt/glance-editor
+cd /opt/glance-editor
+
+# Set up Python environment  
+python3 -m venv glance-env
+source glance-env/bin/activate
+pip install flask pyyaml werkzeug gunicorn requests
+
+# Configure environment variables
+cp .env.example .env
+nano .env  # Edit your settings
+
+# Start the service
+python main.py
+```
+
+## Method 2: Legacy File Transfer (Alternative)
 
 ### Step 1: Prepare Your LXC Container
 ```bash
 # Update system packages
 apt update && apt upgrade -y
 
-# Install Python and required system packages
-apt install python3 python3-pip python3-venv git curl wget -y
+# Install Python and required system packages  
+apt install python3 python3-pip python3-venv curl wget -y
 
 # Create application directory
 mkdir -p /opt/glance-editor
@@ -115,33 +157,39 @@ curl http://localhost:5000
 curl http://[LXC-IP]:5000
 ```
 
-## Method 2: Quick Manual Setup
+## Post-Installation Steps
 
-If you prefer to create files manually:
+### Access Your Editor
+Once installed, access at:
+- From LXC: `http://localhost:5000`
+- From network: `http://[LXC-IP]:5000`
+- Login: `admin` / (your configured password)
 
-### Step 1: Create Directory Structure
+### Configure GitHub Integration (Optional)
+1. Go to Settings page in the web interface
+2. Enable GitHub sync  
+3. Add your GitHub Personal Access Token
+4. Configure repository details
+5. Test the connection
+6. Every save will now push to GitHub automatically
+
+### Maintenance Commands
 ```bash
-mkdir -p /opt/glance-editor/{templates,static,backups}
-cd /opt/glance-editor
+# Check service status
+sudo systemctl status glance-editor
+
+# View logs
+journalctl -u glance-editor -f
+
+# Restart service
+sudo systemctl restart glance-editor
+
+# Fix environment issues
+sudo ./fix-env.sh
+
+# Restore original config
+sudo ./restore-original.sh
 ```
-
-### Step 2: Create main.py
-```bash
-cat > main.py << 'EOF'
-from app import app
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
-EOF
-```
-
-### Step 3: Copy Application Files
-You'll need to manually create or transfer:
-- `app.py` (the main Flask application - 541 lines)
-- `templates/index.html` (main interface)
-- `templates/login.html` (login page) 
-- `templates/settings.html` (settings page)
-- `static/style.css` (custom styles)
 
 ## Configuration Options
 

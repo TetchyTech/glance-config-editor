@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "glance-editor-secret-key-change-me")
 
 # Configuration
-GLANCE_CONFIG_PATH = os.environ.get("GLANCE_CONFIG_PATH", "./glance.yaml")
+GLANCE_CONFIG_PATH = os.environ.get("GLANCE_CONFIG_PATH", "/opt/glance/glance.yaml")
 BACKUP_DIR = os.environ.get("BACKUP_DIR", "./backups")
 SETTINGS_FILE = os.path.join(BACKUP_DIR, "github_settings.json")
 USERNAME = os.environ.get("EDITOR_USERNAME", "admin")

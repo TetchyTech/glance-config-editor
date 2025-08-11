@@ -109,6 +109,17 @@ if [ ! -f "app.py" ]; then
     exit 1
 fi
 
+# Create initial backup of existing glance.yaml if it exists
+if [ -f "$GLANCE_PATH" ]; then
+    print_status "Creating initial backup of existing glance.yaml..."
+    INITIAL_BACKUP_NAME="glance_original_backup_$(date +%Y%m%d_%H%M%S).yaml"
+    cp "$GLANCE_PATH" "/opt/glance-editor/backups/$INITIAL_BACKUP_NAME"
+    print_status "Original configuration backed up as: $INITIAL_BACKUP_NAME"
+else
+    print_warning "Glance config file not found at: $GLANCE_PATH"
+    print_status "The editor will create a default configuration when first accessed."
+fi
+
 # Create systemd service
 print_status "Creating systemd service..."
 cat > /etc/systemd/system/glance-editor.service << EOF
@@ -120,7 +131,11 @@ After=network.target
 Type=exec
 User=root
 WorkingDirectory=/opt/glance-editor
-EnvironmentFile=/opt/glance-editor/.env
+Environment="SESSION_SECRET=$SESSION_SECRET"
+Environment="GLANCE_CONFIG_PATH=$GLANCE_PATH"
+Environment="BACKUP_DIR=/opt/glance-editor/backups"
+Environment="EDITOR_USERNAME=$ADMIN_USER"
+Environment="EDITOR_PASSWORD=$ADMIN_PASS"
 ExecStart=/opt/glance-editor/glance-env/bin/gunicorn --bind 0.0.0.0:5000 --workers 1 --timeout 120 main:app
 Restart=always
 RestartSec=3
