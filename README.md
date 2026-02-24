@@ -1,5 +1,8 @@
 # Glance Configuration Editor
 
+Note:
+While this could be an interesting project and may be helpful for something more standalone, I have been improving an new version of this tool optimized as a Docker container companion to Glance.  I have improved the yml editor, enabled GitHub backups (as well as local), and enabled Glance Error Checking (if YAML breaks Glance, you will see an error message after save and can revert changes).  I will post a link to the project here when I have finished working out final details.
+
 A lightweight web-based editor for Glance dashboard configuration files, designed for easy deployment on Proxmox LXC containers.
 
 ## Features
